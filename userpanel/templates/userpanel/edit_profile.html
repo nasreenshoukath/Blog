@@ -1,0 +1,57 @@
+{% extends 'userpanel/user_base.html' %}
+{% block title %}
+Blogger | EditProfile
+{% endblock %}
+{% block content %}
+<section class="vh-100" style="background-color: #f4f5f7; display: flex; justify-content: center; align-items: flex-start;">
+    <form class="mb-3" method="POST" enctype="multipart/form-data" style="width: 80%; display: flex;">
+
+        {% csrf_token %}
+        
+        <!-- User Details Section -->
+        <div style="flex: 1; padding: 20px;">
+            <label class="mb-3" style="color:#d36715;"><b>USER DETAILS</b></label>
+            <div class="col-md-4 gradient-custom text-center text-white"
+                             style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
+                            <img class="rounded-circle account-img" src="{{ profile.profile_image.url }}" style="width: 150px; height: 150px; cursor: pointer; margin-top: 20px;" />
+                        </div>
+
+            {% for field in form %}
+                <div class="form-group mb-3">
+                    {{ field.label_tag }}
+                    <div style="width: 100%; height: 40px;">
+                        {{ field }}
+                        {{ field.errors }}
+                    </div>
+                </div>
+            {% endfor %}
+            <br>
+            <button class="btn btn-primary mr-2" style="background-color: #c66414; border-color: #c66414;" type="submit">Save Changes</button>
+            <a href="{% url 'viewprofile' %}" class="btn btn-primary" style="background-color: #c63b14; border-color: #c64014;">Cancel</a>
+        </div>
+
+        <!-- Profile Details Section -->
+        <div style="flex: 1; padding: 20px;">
+            <label class="mb-3" style="color:#c66414;"><b>PROFILE DETAILS</b></label>
+            {% for field in form1 %}
+                <div class="form-group mb-3">
+                    {{ field.label_tag }}
+                    {% if field.field.widget.input_type == 'file' %}
+                        <input type="file" name="profile_image" class="form-control" style="max-width: 200px;" />
+                        {% if profile.profile_image %}
+                            <a href="{{ profile.profile_image.url }}" target="_blank" style="margin-top: 10px;">View Previously Uploaded Image</a>
+                        {% endif %}
+                        {{ field.errors }}  <!-- Display any errors related to the file input -->
+                    {% else %}
+                    <div style="width: 100%; height: 40px;">
+                        {{ field }}  <!-- Render other fields as they are -->
+                    </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+           
+        </div>
+
+    </form>
+</section>
+{% endblock %}

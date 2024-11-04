@@ -1,0 +1,61 @@
+{% extends 'userpanel/user_base.html' %}
+{% block title %}
+Blogger | EditBlog
+{% endblock %}
+{% block content %}
+<div class="container">
+    <h1>Update Blog</h1>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                <ul>
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li>{{ field.label }}: {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        
+        <div class="form-group">
+            <label for="{{ form.title.id_for_label }}">Title:</label>
+            {{ form.title }}
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="{{ form.content.id_for_label }}">Content:</label>
+            {{ form.content }}
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="{{ form.image.id_for_label }}">Image:</label>
+            {{ form.blog_image }}
+        </div>
+        <br>
+       
+        <br>
+        <div>
+            {{ form.status.label_tag }}
+            {% for radio in form.status %}
+                <div class="form-check form-check-inline">
+                    {{ radio }}
+                   
+                </div>
+            {% endfor %}
+        </div>
+        <br>
+        <br>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Update Blog</button>
+            <a href="{% url 'myblogs' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

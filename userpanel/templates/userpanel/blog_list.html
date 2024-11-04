@@ -1,0 +1,37 @@
+{% extends 'userpanel/user_base.html' %}
+{% block title %}
+Blogster | BlogList
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h3>Blogs</h3>
+  {% if blogs %}
+    {% for blog in blogs %}
+      <div class="card mb-4">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="{{ blog.blog_image.url }}" class="img-fluid rounded-start" alt="Blog image">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">{{ blog.title }}</h5>
+              <p class="card-text">{{ blog.content|truncatechars:150 }}</p>
+              <a href="{% url 'viewblog' blog.id %}" class="btn btn-primary">Read More</a>
+              <br>
+              <br>
+              <p class="card-text"><strong>Author:</strong> {{ blog.author.first_name }}</p>
+
+              <p class="card-text"><small class="text-muted">Last updated {{ blog.updated_at|date:"F j, Y, g:i a" }}</small></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>No blogs found.</p>
+  {% endif %}
+</div>
+{% endblock %}
+
+

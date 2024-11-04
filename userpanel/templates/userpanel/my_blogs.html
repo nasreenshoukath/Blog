@@ -1,0 +1,55 @@
+{% extends 'userpanel/user_base.html' %}
+
+{% block title %}
+Blogger | MyBlogs
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h3>My Blogs</h3>
+
+  <!-- Navigation Links -->
+  <div class="mb-3">
+    <a href="{% url 'myblogs' %}" class="btn btn-outline-primary {% if view_type == 'published' %}active{% endif %}">Published Blogs</a>
+    <a href="{% url 'draftedblogs' %}" class="btn btn-outline-secondary {% if view_type == 'drafted' %}active{% endif %}">Drafted Blogs</a>
+  </div>
+
+  {% if blogs %}
+    {% for blog in blogs %}
+      <div class="card mb-4">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="{{ blog.blog_image.url }}" class="img-fluid rounded-start" alt="Blog image">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">{{ blog.title }}</h5>
+              <p class="card-text">{{ blog.content|truncatechars:150 }}</p>
+              <a href="{% url 'viewblog' blog.id %}" class="btn btn-primary">Read More</a>
+              <p class="card-text"><small class="text-muted">Last updated {{ blog.updated_at|date:"F j, Y, g:i a" }}</small></p>
+            </div>
+            <div class="dropdown position-absolute" style="top: 10px; right: 10px;">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton{{ forloop.counter }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: lightgrey; border: none;">
+                  <i class="fa fa-ellipsis-v"></i>
+              </button>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ forloop.counter }}">
+                  <a class="dropdown-item" href="{% url 'editblog' blog.id %}">Edit</a>
+                  <form method="POST" action="{% url 'deleteblog' blog.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="dropdown-item" onclick="return confirm('Are you sure you want delete blog');">Delete</button>
+                  </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>No blogs found.</p>
+  {% endif %}
+</div>
+
+{% endblock %}
+
+
+

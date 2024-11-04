@@ -1,0 +1,65 @@
+{% extends 'adminpanel/admin_base.html' %}
+{% load static %}
+{% block title %}
+Blogger | User List
+{% endblock %}
+{% block content %}
+
+<div class="card">
+    <h5 class="card-header">Signed Users</h5>
+    <div class="table-responsive text-nowrap">
+        <table class="table">
+            <thead class="table-dark">
+                <tr>
+                    <th>Username</th>
+                    <th>Profile Image</th>
+                    <th>Blogs</th>
+                    <th>About</th>
+                    <th>Action</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+                {% for user in user_data %}
+                <tr id="user-row-{{ user.user_id }}">
+                    <td>{{ user.username }}</td>
+                    <td>
+                        {% if user.profile_image %}
+                        <img src="{{ user.profile_image }}" alt="Avatar" class="rounded-circle" width="30" height="30"/>
+                        {% else %}
+                        No Image
+                        {% endif %}
+                    </td>
+                    <td>{{ user.blog_count }}</td>
+                    <td>
+                        {% if user.user_id %}
+                        <a href="{% url 'view_user' user.user_id %}" class="btn btn-info">View</a>
+                        {% else %}
+                        <span class="text-muted">No Profile</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if user.user_id %}
+                        <form method="post" action="{% url 'Active_deactive_user' user.user_id %}" class="user-action-form">
+                            {% csrf_token %}
+                            <button type="submit" class="btn {% if user.is_active %}btn-danger{% else %}btn-success{% endif %}">
+                                {% if user.is_active %}Deactivate{% else %}Activate{% endif %}
+                            </button>
+                        </form>
+                        {% else %}
+                        <span class="text-muted">Action Unavailable</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="badge {% if user.is_active %}bg-success{% else %}bg-secondary{% endif %}">
+                            {{ user.is_active|yesno:"Active,Inactive" }}
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

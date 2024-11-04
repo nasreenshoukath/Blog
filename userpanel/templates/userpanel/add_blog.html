@@ -1,0 +1,41 @@
+{% extends 'userpanel/user_base.html' %}
+
+{% block title %}
+Blogster | Postblog
+{% endblock %}
+
+{% block content %}
+<div class="row m-5">
+    <div class="col-2"></div>
+    <div class="col-10">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.title.label_tag }}
+            {{ form.title }}
+            <br>
+            {{ form.content.label_tag }}
+            {{ form.content }}
+            <br>
+            <br>
+            {{ form.blog_image.label_tag }}
+            {{ form.blog_image }}
+            <br>
+            <br>
+            <br>
+            <div>
+                {{ form.status.label_tag }}
+                {% for radio in form.status %}
+                    <div class="form-check form-check-inline">
+                        {{ radio }}
+                       
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <br><br> 
+            <input type="submit" value="Post Blog" class="btn btn-primary"/>
+        </form>
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,29 @@
+{% extends 'adminpanel/admin_base.html' %}
+{% block title %}
+Blogster | Notification
+{% endblock %}
+{% block content %}
+<div class="content-wrapper">
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <div class="row">
+            <div class="col-lg-8 mb-2">
+                <div class="card">
+                    <div class="d-flex align-items-center flex-column">
+                        {% for i in blog %}
+                          <div class="row mb-2">
+                              <div class="col">
+                                  {% if i.created_at == i.updated_at %}
+                                     <p>A new blog has been posted by {{ i.author.username }} on {{ i.created_at }}</p>
+                                  {% else %}
+                                     <p>{{ i.title }} has been updated on {{ i.updated_at }} by {{ i.author.username }}</p>
+                                  {% endif %}
+                              </div>
+                          </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

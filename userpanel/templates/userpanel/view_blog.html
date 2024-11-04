@@ -1,0 +1,90 @@
+{% extends 'userpanel/user_base.html' %}
+
+{% block title %}
+Blogger | {{ blog.title }}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h3>{{ blog.title }}</h3>
+    <img class="card-img-top" src="{{ blog.blog_image.url }}" alt="Blog image">
+    <div class="card-body">
+        <div id="message-bar" style="display: none;"></div> <!-- Message bar for notifications -->
+        <p>{{ blog.content }}</p>
+        <p class="card-text"><small class="text-muted">Last updated {{ blog.updated_at|date:"F j, Y, g:i a" }}</small></p>
+        
+        <h1>Comments ({{ comment_count }})</h1>
+        <button type="button" class="btn btn-info btn-sm" id="toggle-comments">Show Comments</button>
+        <br>
+        <ul class="list-unstyled" id="comments-list" style="display: none;">
+            {% for comment in comments %}
+                <li class="mb-2">
+                    <div class="comment-summary">
+                        <strong>{{ comment.comment }}</strong> <br>
+                        {{ comment.author }} ({{ comment.created_at|date:"F j, Y, g:i a" }})
+                    </div>
+                    
+                    <div class="dropdown float-right">
+                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton{{ comment.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            &#8230; <!-- Ellipsis -->
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ comment.id }}">
+                            <!-- Edit form trigger -->
+                            <form method="GET" action="{% url 'edit_comment' comment.id %}">
+                                {% csrf_token %}
+                                
+                                <button type="submit" class="dropdown-item">Edit</button>
+                            </form>
+                    
+                            <!-- Delete form trigger -->
+                            <form method="POST" action="{% url 'delete_comment' comment.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="dropdown-item">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                
+            {% empty %}
+                <li>No comments yet.</li>
+            {% endfor %}
+        </ul>
+        <br>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.comment.label_tag }}
+                <div class="input-group"> <!-- Use input group for better alignment -->
+                    <textarea name="comment" class="form-control" rows="3"></textarea>
+                </div>
+                {% if form.comment.errors %}
+                    <div class="text-danger">
+                        {% for error in form.comment.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary">Comment</button>
+        </form>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const toggleButton = document.getElementById('toggle-comments');
+        const commentsList = document.getElementById('comments-list');
+    
+        // Toggle comments visibility
+        toggleButton.addEventListener('click', () => {
+            if (commentsList.style.display === 'none') {
+                commentsList.style.display = 'block';
+                toggleButton.textContent = 'Hide Comments';
+            } else {
+                commentsList.style.display = 'none';
+                toggleButton.textContent = 'Show Comments';
+            }
+        });
+    });
+    </script>
+
+{% endblock %}

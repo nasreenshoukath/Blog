@@ -1,0 +1,69 @@
+{% extends 'userpanel/user_base.html' %}
+{% block title %}
+Blogger | Home
+{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        background-image: url('https://img.freepik.com/premium-photo/orange-smoke-abstract-white-background_55716-587.jpg?w=360');
+        background-size: cover; /* Makes the image cover the whole page */
+        background-repeat: no-repeat; /* Prevents the image from repeating */
+        background-attachment: fixed; /* Keeps the background fixed when scrolling */
+        background-position: center; /* Centers the image */
+    }
+    .welcome-heading {
+        color: rgb(190, 77, 12);
+        text-align: center;
+    
+    }
+    .create-blog-button {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        color: #fff;
+        background-color: rgb(190, 77, 12);
+        border: none;
+        border-radius: 5px;
+        text-align: center;
+        text-decoration: none;
+        margin-top: 20px;
+        cursor: pointer;
+    }
+    .create-blog-button:hover {
+        background-color: rgb(150, 60, 10);
+    }
+   
+    .h2{
+        text-align: center;
+         color: #000;
+    }
+    .h3{
+        text-align: center;
+        color: #bd3a0b;
+    }
+    
+    .p{
+        text-align: center;
+        color: #000;
+    }
+    
+</style>
+
+<h1 class="welcome-heading"><b>Hey ! </h1></b>
+<h2 class="h2">{{ logged_user.first_name }} {{ logged_user.last_name }}</h2>
+<br>
+<br>
+<h4 class="h3"><b>Publish Your Passions, Your Way</h4></b>
+<p class="p"><b>Create unique and beautiful Blog</p></b>
+<br>
+
+
+<br>
+<br><br>
+<br>
+<br><br>
+<br>
+<br><br>
+
+{% endblock %}

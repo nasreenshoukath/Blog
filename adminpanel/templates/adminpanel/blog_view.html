@@ -1,0 +1,71 @@
+{% extends 'adminpanel/admin_base.html' %}
+{% block title %}
+Blogger | Blog View
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h3>{{ blog.title }}</h3>
+  <img class="card-img-top" src="{{ blog.blog_image.url }}" alt="Blog image">
+  <div class="card-body">
+    <p>{{ blog.content }}</p>
+    <p class="card-text"><small class="text-muted">Last updated {{ blog.updated_at|date:"F j, Y, g:i a" }}</small></p>
+    
+    <h1>Comments ({{ comment_count }})</h1>
+    
+    {% if comments %}
+      <button type="button" class="btn btn-info btn-sm" id="toggle-comments">Show Comments</button>
+      <br>
+      {% if messages %}
+      <div class="alert alert-danger" role="alert">
+          {% for message in messages %}
+              {{ message }}
+          {% endfor %}
+      </div>
+      {% endif %}
+
+      <ul class="list-unstyled" id="comments-list" style="display: none;">
+          {% for comment in comments %}
+              <li class="mb-2">
+                  <div class="comment-summary">
+                      <strong>{{ comment.comment }}</strong> <br>
+                      {{ comment.author }} ({{ comment.created_at|date:"F j, Y, g:i a" }})
+                  </div>
+                  <form method="post" action="{% url 'blogview' blog.id %}" style="display:inline;">
+                      {% csrf_token %}
+                      <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                      {% if comment.is_hidden %}
+                          <button type="submit" name="show_comment" class="btn btn-success btn-sm">Show Comment</button>
+                      {% else %}
+                          <button type="submit" name="hide_comment" class="btn btn-danger btn-sm">Hide Comment</button>
+                      {% endif %}
+                  </form>
+              </li>
+          {% endfor %}
+      </ul>
+    {% else %}
+      <p>No comments yet.</p>
+    {% endif %}
+  
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleButton = document.getElementById('toggle-comments');
+    const commentsList = document.getElementById('comments-list');
+
+    if (toggleButton) {
+        toggleButton.addEventListener('click', function() {
+            if (commentsList.style.display === 'none' || commentsList.style.display === '') {
+                commentsList.style.display = 'block';
+                toggleButton.textContent = 'Hide Comments';
+            } else {
+                commentsList.style.display = 'none';
+                toggleButton.textContent = 'Show Comments';
+            }
+        });
+    } 
+});
+</script>
+{% endblock %}

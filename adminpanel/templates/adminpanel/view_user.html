@@ -1,0 +1,52 @@
+{% extends 'adminpanel/admin_base.html' %}
+{% block title %}
+Blogger | View User
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <!-- Left Column: Personal Details -->
+        <div class="col-md-6 d-flex align-items-stretch">
+            <div class="card w-100 h-100">
+                <h3 class="card-header">{{ user.first_name }}'s Information</h3>
+                <div class="card-body">
+                    <p><strong>Username:</strong> {{ user.username }}</p>
+                    <p><strong>First Name:</strong> {{ user.first_name }}</p>
+                    <p><strong>Last Name:</strong> {{ user.last_name }}</p>
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                    <p><strong>Phone:</strong> {{ user.profile.phone }}</p>
+                    <p><strong>Blogs Count:</strong> {{ user.blog_set.count }}</p>
+                    <!-- Add more personal details as necessary -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: About and Profile Image -->
+        <div class="col-md-6 d-flex align-items-stretch">
+            <div class="card w-100 h-100">
+                <div class="card-body">
+                    <p><strong>About:</strong> {{ user.profile.about_description }}</p> 
+                   
+                    <p>
+                        <strong>Profile Image:</strong><br>
+                        {% if user.profile.profile_image %}
+                        <img src="{{ user.profile.profile_image.url }}" alt="Profile Image" width="100">
+                        {% else %}
+                        No Image
+                        {% endif %}
+                    </p>
+                    <p>
+                        <strong>ID Proof :</strong><br>
+                        {% if user.profile.id_proof %}
+                        <img src="{{ user.profile.id_proof.url }}" alt="ID Proof Image" width="100">
+                        {% else %}
+                        No Image
+                        {% endif %}
+                    </p>
+                    <!-- Add more fields as necessary -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
